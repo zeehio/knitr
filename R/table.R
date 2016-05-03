@@ -264,7 +264,13 @@ kable_html = function(x, table.attr = '', caption = NULL, escape = TRUE, ...) {
     '<tbody>',
     paste(
       '  <tr>',
-      apply(x, 1, function(z) paste(sprintf('   <td%s> %s </td>', align, z), collapse = '\n')),
+      # If `align` was a matrix like `x` then we could have a format for each cell
+      #vapply(1:nrow(x),
+      #       FUN = function(i) paste(sprintf('   <td%s> %s </td>', xfmt[i,], x[i,]), collapse = '\n'),
+      #       FUN.VALUE = ""),
+      vapply(1:nrow(x),
+             FUN = function(i) paste(sprintf('   <td%s> %s </td>', align, x[i,]), collapse = '\n'),
+             FUN.VALUE = ""),
       '  </tr>', sep = '\n'
     ),
     '</tbody>',
